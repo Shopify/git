@@ -304,6 +304,7 @@ static struct ref *handshake(struct transport *transport, int for_push,
 static struct ref *get_refs_via_connect(struct transport *transport, int for_push,
 					const struct argv_array *ref_prefixes)
 {
+	trace_printf("get_refs_via_connect");
 	return handshake(transport, for_push, ref_prefixes, 1);
 }
 
@@ -342,6 +343,7 @@ static int fetch_refs_via_pack(struct transport *transport,
 	args.negotiation_tips = data->options.negotiation_tips;
 
 	if (!data->got_remote_heads) {
+		trace_printf("fetch_refs_via_pack: got_remote_heads");
 		int i;
 		int must_list_refs = 0;
 		for (i = 0; i < nr_heads; i++) {
@@ -661,6 +663,7 @@ static int git_transport_push(struct transport *transport, struct ref *remote_re
 	if (transport_color_config() < 0)
 		return -1;
 
+	trace_printf("git_transport_push");
 	if (!data->got_remote_heads)
 		get_refs_via_connect(transport, 1, NULL);
 
