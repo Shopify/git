@@ -305,7 +305,7 @@ static struct ref *get_refs_via_connect(struct transport *transport, int for_pus
 					const struct argv_array *ref_prefixes)
 {
 	trace_printf("get_refs_via_connect");
-	return handshake(transport, for_push, ref_prefixes, 1);
+	return handshake(transport, for_push, ref_prefixes, 0);
 }
 
 static int fetch_refs_via_pack(struct transport *transport,
