@@ -273,29 +273,36 @@ static size_t fwrite_wwwauth(char *ptr, size_t eltsize, size_t nmemb, void *p)
 		strbuf_add(&buf, val, val_len);
 		strbuf_trim(&buf);
 
-		if (slot && slot->results) {
-			/* Parse the retry-after value (delay-seconds or HTTP-date) */
-			char *endptr;
-			long retry_after = strtol(buf.buf, &endptr, 10);
+	if (slot && slot->results) {
+		/* Parse the retry-after value (delay-seconds or HTTP-date) */
+		char *endptr;
+		long retry_after;
 
-			/* Check if it's a valid integer (delay-seconds format) */
-			if (endptr != buf.buf && *endptr == '\0' && retry_after > 0) {
-				slot->results->retry_after = retry_after;
-			} else {
-				/* Try parsing as HTTP-date format */
-				timestamp_t timestamp;
-				int offset;
-				if (!parse_date_basic(buf.buf, &timestamp, &offset)) {
-					/* Successfully parsed as date, calculate delay from now */
-					timestamp_t now = time(NULL);
-					if (timestamp > now) {
-						slot->results->retry_after = (long)(timestamp - now);
-					} else {
-						/* Past date means retry immediately */
-						slot->results->retry_after = 0;
-					}
+		errno = 0;
+		retry_after = strtol(buf.buf, &endptr, 10);
+
+		/* Check if it's a valid integer (delay-seconds format) */
+		if (endptr != buf.buf && *endptr == '\0' &&
+		    errno != ERANGE && retry_after > 0) {
+			slot->results->retry_after = retry_after;
+		} else {
+			/* Try parsing as HTTP-date format */
+			timestamp_t timestamp;
+			int offset;
+			if (!parse_date_basic(buf.buf, &timestamp, &offset)) {
+				/* Successfully parsed as date, calculate delay from now */
+				timestamp_t now = time(NULL);
+				if (timestamp > now) {
+					slot->results->retry_after = (long)(timestamp - now);
+				} else {
+					/* Past date means retry immediately */
+					slot->results->retry_after = 0;
 				}
+			} else {
+				/* Failed to parse as either delay-seconds or HTTP-date */
+				warning(_("unable to parse Retry-After header value: '%s'"), buf.buf);
 			}
+		}
 		}
 
 		http_auth.header_is_last_match = 1;
