@@ -2339,7 +2339,7 @@ static int update_url_from_redirect(struct strbuf *base,
 static void sleep_for_retry(long retry_after)
 {
 	if (retry_after > 0) {
-		fprintf(stderr, _("rate limited, waiting %ld seconds before retry...\n"), retry_after);
+		warning(_("rate limited, waiting %ld seconds before retry"), retry_after);
 		trace2_region_enter("http", "retry-sleep", the_repository);
 		trace2_data_intmax("http", the_repository, "http/retry-sleep-seconds",
 				   retry_after);
