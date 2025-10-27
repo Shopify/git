@@ -2339,11 +2339,16 @@ static int update_url_from_redirect(struct strbuf *base,
 static void sleep_for_retry(long retry_after)
 {
 	if (retry_after > 0) {
+		unsigned int remaining;
 		warning(_("rate limited, waiting %ld seconds before retry"), retry_after);
 		trace2_region_enter("http", "retry-sleep", the_repository);
 		trace2_data_intmax("http", the_repository, "http/retry-sleep-seconds",
 				   retry_after);
-		sleep(retry_after);
+		remaining = sleep(retry_after);
+		while (remaining > 0) {
+			/* Sleep was interrupted, continue sleeping */
+			remaining = sleep(remaining);
+		}
 		trace2_region_leave("http", "retry-sleep", the_repository);
 	}
 }
